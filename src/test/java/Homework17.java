@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 public class Homework17 extends BaseTest {
     @Test
     public void addSongPlaylist() throws InterruptedException {
-        String newSongAddedNotificationText = "Added 1 song into";
+        String newSongAddedNotificationText = "I added one song";
 
     }
 
@@ -14,11 +14,12 @@ public class Homework17 extends BaseTest {
         WebElement searchField = driver.findElement(By.cssSelector("div#SearchForm input[type = search]"));
         searchField.sendKeys(SongTitleKeyword);
         Thread.sleep(2000);
+
         navigateToPage();
-        provideEmail("igor.smirnov@testpro.io");
+        provideEmail("demo@class.com");
         providePassword("te$t$tudent");
         clickSubmit();
-        searchSong("Pluto");
+        searchSong("Dark Days");
         clickViewAllBtn();
         selectFirstSongResult();
         clickAddToBtn();
@@ -42,7 +43,7 @@ public class Homework17 extends BaseTest {
             Thread.sleep(2000);
         }
         public void choosePlaylist() throws InterruptedException {
-            WebElement playlistElement = driver.findElement(By.xpath("//section[@id = 'songResultsWrapper']//li[contains(text(),'Test Pro Playlist')]"));
+            WebElement playlistElement = driver.findElement(By.xpath("//section[@id = 'songResultsWrapper']//li[contains(text(),'Igor Smirnov')]"));
             playlistElement.click();
             Thread.sleep(2000);
         }
