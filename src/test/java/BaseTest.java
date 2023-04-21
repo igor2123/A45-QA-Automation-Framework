@@ -15,6 +15,8 @@ public class BaseTest {
         WebDriverManager.chromedriver().setup();
     }
 
+    
+
       protected static void navigateToPage() {
         String url = "https://bbb.testpro.io/";
         driver.get(url);
