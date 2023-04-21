@@ -9,7 +9,7 @@ public class Homework17 extends BaseTest {
         String newSongAddedNotificationText = "I added one song";
 
     }
-
+    @Test
     public void searchSong(String SongTitleKeyword) throws InterruptedException {
         WebElement searchField = driver.findElement(By.cssSelector("div#SearchForm input[type = search]"));
         searchField.sendKeys(SongTitleKeyword);
