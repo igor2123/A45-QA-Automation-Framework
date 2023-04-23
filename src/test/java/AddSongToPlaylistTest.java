@@ -27,7 +27,7 @@ public class AddSongToPlaylistTest{
         // Search for a song
         WebElement searchInput = driver.findElement(By.id("search-input"));
         WebElement searchButton = driver.findElement(By.id("search-button"));
-        searchInput.sendKeys("Dark Days");
+        searchInput.sendKeys("Pluto");
         searchButton.click();
 
         // View all search results
