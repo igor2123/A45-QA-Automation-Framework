@@ -5,11 +5,11 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import java.time.Duration;
 
+
 public class LoginTests extends BaseTest {
 
-    @Test
-    public static void LoginValidEmailPasswordTest() {
-
+    @Test(enabled = false, priority =2, description = "LoginInvalidEmailInvalidPasswordTest")
+    public static void LoginInvalidEmailInvalidPasswordTest() {
         driver = new ChromeDriver();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
