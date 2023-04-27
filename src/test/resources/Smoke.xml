@@ -2,12 +2,12 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="TestNG">
-
     <test name="Example Test" preserve-order="false">
+        <parameter name="baseUrl" value="https://bbb.testpro.io/"/>
         <classes>
-            <class name="LoginTests">
+            <class name="Homework20">
                 <methods>
-                    <include name="loginValidEmailPasswordTest" />
+                    <include name="DeletePlaylistTest" />
                 </methods>
             </class>
         </classes>
