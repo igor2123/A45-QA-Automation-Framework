@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 
 public class Homework20 extends BaseTest{
     @Test
-    public void DeletePlaylistTest() throws InterruptedException {
+    public void deletePlaylistTest()  {
 
 
         navigateToPage();
@@ -17,7 +17,7 @@ public class Homework20 extends BaseTest{
         WebElement deletedplaylistmsg = getDeletedPlaylistmsg();
         Assert.assertTrue(deletedplaylistmsg.isDisplayed());
 
-        //String playlistName = " Automated Playlist";
+
 
     }
 }
