@@ -6,9 +6,9 @@
     <test name="Example Test" preserve-order="false">
         <parameter name="BaseURL" value="https://bbb.testpro.io/"/>
         <classes>
-            <class name="LoginTests">
+            <class name="Homework21">
                 <methods>
-                    <include name="loginInvalidEmailValidPasswordTest" />
+                    <include name="renamePlayList" />
                 </methods>
             </class>
         </classes>
