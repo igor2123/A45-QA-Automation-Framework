@@ -1,18 +1,25 @@
+import Pages.BasePage;
+import Pages.HomePage;
+import Pages.LoginPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class ProfileTests extends BaseTest {
+public class ProfileTests extends BaseTests{
 
-    @Test
-    public static void changeProfileNameTest () throws InterruptedException {
 
+    @Test(enabled = true, priority = 0, description = "Change profile theme")
+    public void changeProfileNameTest() throws InterruptedException {
+        LoginPage loginPage = new LoginPage(driver);
+        HomePage homePage = new HomePage(driver);
+        BasePage basePage = new BasePage(driver);
+
+        navigateToPage();
         provideEmail("demo@class.com");
         providePassword("te$t$tudent");
         clickSubmit();
-
-        Thread.sleep(2000);
         clickAvatarIcon();
 
         String randomName = generateRandomName();
@@ -20,9 +27,7 @@ public class ProfileTests extends BaseTest {
         provideCurrentPassword("te$t$tudent");
         provideProfileName(randomName);
         clickSaveButton();
-
-        Thread.sleep(2000);
-        WebElement actualProfileName = driver.findElement(By.cssSelector("a.view-profile>span"));
+        WebElement actualProfileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a.view-profile>span")));
         Assert.assertEquals(actualProfileName.getText(), randomName);
     }
 }
