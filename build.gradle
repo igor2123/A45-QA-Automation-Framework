@@ -27,8 +27,3 @@ task testSmoke(type: Test) {
     }
 }
 
-task testRegression(type: Test) {
-    useTestNG() {
-        suites "src/test/resources/Regression.xml"
-    }
-}
