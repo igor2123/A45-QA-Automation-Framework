@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 public class Homework22 extends BaseTests {
 
     @Test
-    public void renamePlaylist() throws InterruptedException{
+    public void renamePlaylist() {
         String playlistName = "TestPro Playlist";
         HomePage homePage = new HomePage(driver);
         LoginPage loginPage = new LoginPage(driver);
