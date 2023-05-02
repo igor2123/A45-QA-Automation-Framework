@@ -37,7 +37,7 @@ public class BaseTests {
 
     @BeforeMethod
     @Parameters({"BaseURL"})
-    public void launchBrowser() {
+    public void launchBrowser(String BaseURL) {
         //      Added ChromeOptions argument below to fix websocket error
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
@@ -46,6 +46,9 @@ public class BaseTests {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
 
+        url = BaseURL;
+        navigateToPage();
+
     }
 
         @AfterMethod
@@ -53,8 +56,7 @@ public class BaseTests {
         driver.quit();
     }
 
-    public void navigateToPage() {
-        String url = "https://bbb.testpro.io/";
+    public static void navigateToPage() {
         driver.get(url);
 
     }
