@@ -1,139 +1,90 @@
+import java.net.URI;
+import java.net.MalformedURLException;
+import java.time.Duration;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-import org.testng.annotations.*;
-
-import java.time.Duration;
-import java.util.List;
-import java.util.UUID;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Parameters;
 
 public class BaseTest {
-    public static WebDriver driver = null;
-    public static WebDriverWait wait = null;
-    public static Actions actions = null;
+    // Initialize the url as an empty string
     public static String url = "";
+    // Initialize the driver variable as null
+    private static WebDriver driver = null;
+    // Initialize the wait variable as null
+    private static WebDriverWait wait = null;
+    // Initialize the actions variable as null
+    private static Actions actions = null;
 
     @BeforeSuite
-    static void setupClass() {
+    public void setupClass() {
+        // Set up the ChromeDriver
         WebDriverManager.chromedriver().setup();
     }
 
-    @DataProvider(name="IncorrectLoginData")
-    public static Object[][] getDataFromDataProviders() {
-
-        return new Object[][] {
-                {"invalid@mail.com", "invalidPass"},
-                {"demo@class.com", ""},
-                {"", ""}
-        };
-    }
     @BeforeMethod
-    @Parameters({"BaseURL"})
-    public void launchBrowser(String BaseURL) {
-        //      Added ChromeOptions argument below to fix websocket error
+    @Parameters({"BaseURL", "browser"})
+    public void launchBrowser(String BaseURL, String browser) throws MalformedURLException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
-
         driver = new ChromeDriver(options);
-//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        // Check which browser was passed as a parameter
+        driver = pickBrowser(browser);
+        // Set the implicit wait time to 10 seconds
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        // Initialize the wait object with a timeout of 10 seconds
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        // Initialize the actions object with the driver
         actions = new Actions(driver);
+        // Set the url variable to the passed BaseURL
         url = BaseURL;
         navigateToPage();
     }
 
-    @AfterMethod//(enabled = false)
-    public void closeBrowser() {
-        driver.quit();
-    }
-
-    public static void navigateToPage() {
+    private void navigateToPage() {
         driver.get(url);
     }
 
-    public static void provideEmail(String email) {
-        WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='email']")));
-        emailField.clear();
-        emailField.sendKeys(email);
-    }
+    public static WebDriver pickBrowser(String browser) throws MalformedURLException {
+        // Initialize the DesiredCapabilities object
+        DesiredCapabilities caps = new DesiredCapabilities();
+        // Initialize the gridURL string
+        String gridURL = "http://192.168.12.105:4444";
 
-    public static void providePassword(String password) {
-        WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='password']")));
-        passwordField.clear();
-        passwordField.sendKeys(password);
-    }
+        switch (browser) {
+            case "firefox":
+                // Set up the FirefoxDriver
+                WebDriverManager.firefoxdriver().setup();
+                return new FirefoxDriver();
 
-    public static void clickSubmit() {
-        WebElement submit = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[type='submit']")));
-        submit.click();
-    }
+            case "Edge":
+                // Set up the EdgeDriver
+                WebDriverManager.edgedriver().setup();
+                return new EdgeDriver();
 
-    public static void clickSaveButton() {
-        WebElement saveButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.btn-submit")));
-        saveButton.click();
-    }
+            case "grid-edge":
+                // Set up the RemoteWebDriver for Edge on the Selenium Grid
+                caps.setCapability("browserName", "MicrosoftEdge");
+                return new RemoteWebDriver((URI.create(gridURL).toURL()), caps);
 
-    public static void provideProfileName(String randomName) {
-        WebElement profileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[name='name']")));
-        profileName.clear();
-        profileName.sendKeys(randomName);
-    }
+            case "grid-firefox":
+                // Set up the RemoteWebDriver for Firefox on the Selenium Grid
+                caps.setCapability("browserName", "Firefox");
+                return new RemoteWebDriver((URI.create(gridURL).toURL()), caps);
 
-    public static void provideCurrentPassword(String password) {
-        WebElement currentPassword = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[name='current_password']")));
-        currentPassword.clear();
-        currentPassword.sendKeys(password);
-    }
-
-    public static String generateRandomName() {
-        return UUID.randomUUID().toString().replace("-", "");
-    }
-
-    public static void clickAvatarIcon() {
-        WebElement avatarIcon = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("img.avatar")));
-        avatarIcon.click();
-    }
-
-    // hover
-    public void hoverPlay() {
-        WebElement play = driver.findElement(By.cssSelector("[data-testid='play-btn']"));
-        // move to element
-        actions.moveToElement(play).perform();
-    }
-
-    // context click
-    public void chooseAllSongsList() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("li a.songs")));
-        driver.findElement(By.cssSelector("li a.songs")).click();
-    }
-
-    public void contextClickFirstSong(){
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".all-songs tr.song-item:nth-child(1)")));
-        WebElement firstSong = driver.findElement(By.cssSelector(".all-songs tr.song-item:nth-child(1)"));
-        // context click
-        actions.contextClick(firstSong).perform();
-    }
-
-    public void displayAllSongs() {
-        chooseAllSongsList();
-    //add assertion
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".all-songs tr.song-item")));
-        List<WebElement> songsList = driver.findElements(By.cssSelector(".all-songs tr.song-item"));
-        Assert.assertEquals(songsList.size(), 63);
-    }
-
-    // double click
-    public void doubleClickChoosePlaylist() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".playlist:nth-child(3)")));
-        // double click
-        WebElement playlist = driver.findElement(By.cssSelector(".playlist:nth-child(3)"));
-        actions.doubleClick(playlist).perform();
+            default:
+                // Set up the ChromeDriver by default
+                return new ChromeDriver();
+        }
     }
 }

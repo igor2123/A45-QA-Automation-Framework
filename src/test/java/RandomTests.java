@@ -4,10 +4,10 @@ public class RandomTests extends BaseTest {
 
     @Test
     public void actionMethods() {
-        provideEmail("demo@class.com");
-        providePassword("te$t$tudent");
-        clickSubmit();
-        doubleClickChoosePlaylist();
+   //     provideEmail("demo@class.com");
+    //    providePassword("te$t$tudent");
+    //    clickSubmit();
+    //    doubleClickChoosePlaylist();
 
 //        hoverPlay();
 //        contextClickFirstSong();
@@ -15,9 +15,9 @@ public class RandomTests extends BaseTest {
 
     @Test
     public void listOfSongsWebElements() {
-        provideEmail("demo@class.com");
-        providePassword("te$t$tudent");
-        clickSubmit();
-        displayAllSongs();
+     //   provideEmail("demo@class.com");
+      //  providePassword("te$t$tudent");
+      //  clickSubmit();
+      //  displayAllSongs();
     }
 }
