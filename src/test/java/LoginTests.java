@@ -1,19 +1,13 @@
-
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.Assert;
 import org.testng.annotations.Test;
+import pages.LoginPage;
 
 public class LoginTests extends BaseTest {
 
     @Test
-    public static void loginEmptyEmailEmptyPasswordTest() {
-    WebDriver driver = new ChromeDriver();
+    public void loginEmptyEmailEmptyPasswordTest() {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login();
 
-    String url = "https://bbb.testpro.io/";
-    driver.get(url);
-        Assert.assertEquals(driver.getCurrentUrl(), url);
-        driver.quit();
     }
-    }
+}
 
