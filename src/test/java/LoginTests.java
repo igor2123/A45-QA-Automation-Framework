@@ -9,6 +9,7 @@ public class LoginTests extends BaseTest {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.login();
 
-
     }
+
+
 }

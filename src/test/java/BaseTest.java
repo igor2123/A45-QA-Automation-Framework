@@ -3,16 +3,23 @@ import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.UUID;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
@@ -20,7 +27,9 @@ import org.testng.annotations.Parameters;
 
 public class BaseTest {
 
-    private WebDriver driver;
+    private static WebDriver driver;
+    public static Actions actions = null;
+    public static WebDriverWait wait;
     private static String url = "";
     private ThreadLocal<WebDriver> threadDriver;
 
@@ -30,6 +39,8 @@ public class BaseTest {
         driver = pickBrowser(browser);
         driver.get(baseURL);
         url = baseURL;
+        actions = new Actions(driver);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         threadDriver = ThreadLocal.withInitial(() -> driver);
         getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
@@ -93,4 +104,73 @@ public class BaseTest {
             threadDriver.remove();
         }
     }
+
+    public static void provideEmail(String email) {
+        WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@type='email']")));
+        emailField.sendKeys(email);
+    }
+
+    public static void providePassword(String password) {
+
+        WebElement passwordField = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@type='password']")));
+        passwordField.sendKeys(password);
+    }
+
+    public static void clickSubmit() throws InterruptedException {
+        WebElement submitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@type='submit']")));
+        submitButton.click();
+
+
+    }
+
+
+    public static void clickSaveButton() {
+        WebElement saveButton = driver.findElement(By.cssSelector("button.btn-submit"));
+        saveButton.click();
+    }
+
+    public static void provideProfileName(String randomName) {
+        WebElement profileName = driver.findElement(By.cssSelector("[name='name']"));
+        profileName.clear();
+        profileName.sendKeys(randomName);
+    }
+
+    public static void provideCurrentPassword(String password) {
+        WebElement currentPassword = driver.findElement(By.cssSelector("[name='current_password']"));
+        currentPassword.clear();
+        currentPassword.sendKeys(password);
+
+    }
+
+    public static String generateRandomName() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
+    public static void clickAvatarIcon() {
+        WebElement avatarIcon = driver.findElement(By.cssSelector("img.avatar"));
+        avatarIcon.click();
+
+    }
+
+    public void doubleClickChoosePlaylist() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".playlist:nth-child(3)")));
+        WebElement playlistElement = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".playlist:nth-child(3)")));
+        actions.doubleClick(playlistElement).perform();
+    }
+
+
+      public void enterPlaylistName() {
+      WebElement playlistInputField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='name']")));
+      playlistInputField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
+      playlistInputField.sendKeys();
+      playlistInputField.sendKeys(Keys.ENTER);
+      }
+
+      public boolean doesPlaylistExist() {
+          WebElement playlistElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='" + "" + "']")));
+          return playlistElement.isDisplayed();
+
+      }
+
 }
+
