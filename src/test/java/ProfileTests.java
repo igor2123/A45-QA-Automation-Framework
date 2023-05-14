@@ -1,28 +1,119 @@
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class ProfileTests extends BaseTest {
+import java.time.Duration;
+import java.util.UUID;
 
-    @Test
-    public static void changeProfileNameTest () throws InterruptedException {
+public class ProfileTests {
 
-        provideEmail("demo@class.com");
-        providePassword("te$t$tudent");
-        clickSubmit();
 
-        Thread.sleep(2000);
-        clickAvatarIcon();
+    private WebDriver driver;
+    private WebDriverWait wait;
 
-        String randomName = generateRandomName();
+    @Before
+    @Given("I open browser")
+    public void openBrowser() {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--disable-notifications");
+        options.addArguments("--remote-allow-origins=*");
+        driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-        provideCurrentPassword("te$t$tudent");
-        provideProfileName(randomName);
-        clickSaveButton();
-
-        Thread.sleep(2000);
-        WebElement actualProfileName = driver.findElement(By.cssSelector("a.view-profile>span"));
-        Assert.assertEquals(actualProfileName.getText(), randomName);
     }
+
+    @After
+    public void iCloseBrowser() {
+        driver.quit();
+
+    }
+
+    @When("I enter email \"demo@class.com")
+    public void iEnterEmailDemoClassCom() {
+        WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='email']")));
+        emailField.clear();
+        emailField.sendKeys("demo@class.com");
+
+    }
+
+    @And("I enter password \"te$t$tudent")
+    public void iEnterPasswordTe$t$tudent() {
+        WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='password']")));
+        passwordField.clear();
+        passwordField.sendKeys("te$t$tudent");
+
+    }
+
+    @And("I submit button")
+    public void iSubmitButton() {
+        WebElement submit = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[type='submit']")));
+        submit.click();
+
+    }
+
+    @Then("I am logged in")
+    public void iAmLoggedIn() {
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img.avatar"))).isDisplayed());
+
+    }
+
+    @And("I click avatar icon")
+    public void iClickAvatarIcon() {
+        WebElement avatarIcon = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("img.avatar")));
+        avatarIcon.click();
+    }
+
+    @And("I provide current email")
+    public void iProvideCurrentEmail() {
+        WebElement currentEmail = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[name='current_email']")));
+        currentEmail.clear();
+        currentEmail.sendKeys("demo@class.com");
+    }
+
+    @And("I provide current password")
+    public void iProvideCurrentPassword() {
+        WebElement currentPassword = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[name='current_password']")));
+        currentPassword.clear();
+        currentPassword.sendKeys("te$t$tudent");
+    }
+
+    public static String generateRandomName() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
+    @And("I change profile name")
+    public void iChangeProfileName() {
+        WebElement profileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[name='name']")));
+        profileName.clear();
+        profileName.sendKeys(generateRandomName());
+    }
+
+    @And("I click save button")
+    public void iClickSaveButton() {
+        WebElement saveButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.btn-submit")));
+        saveButton.click();
+    }
+
+    @Then("I changed profile name")
+    public void iChangedProfileName() {
+        WebElement actualProfileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a.view-profile>span")));
+
+        Assert.assertEquals(actualProfileName.getText(), "randomName");
+    }
+
 }
