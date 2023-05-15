@@ -11,10 +11,10 @@
 <!--                    <include name="actionMethods" />-->
 <!--                </methods>-->
 <!--            </class>-->
-                        <class name="LoginTests">
+                        <class name="CucumberRunner">
                             <methods>
-                                <include name="loginValidEmailPasswordTest" />
-                                <include name="loginValidEmailEmptyPasswordTest" />
+  <!--                              <include name="loginValidEmailPasswordTest" />-->
+   <!--                             <include name="loginValidEmailEmptyPasswordTest" />-->
                             </methods>
                         </class>
         </classes>
