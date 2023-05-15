@@ -84,19 +84,7 @@ public class ProfileTests {
         avatarIcon.click();
     }
 
-    @And("I provide current email")
-    public void iProvideCurrentEmail() {
-        WebElement currentEmail = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[name='current_email']")));
-        currentEmail.clear();
-        currentEmail.sendKeys("demo@class.com");
-    }
 
-    @And("I provide current password")
-    public void iProvideCurrentPassword() {
-        WebElement currentPassword = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[name='current_password']")));
-        currentPassword.clear();
-        currentPassword.sendKeys("te$t$tudent");
-    }
 
     public static String generateRandomName() {
         return UUID.randomUUID().toString().replace("-", "");
@@ -122,4 +110,17 @@ public class ProfileTests {
         Assert.assertEquals(actualProfileName.getText(), "randomName");
     }
 
-}
+    @And("I provide current email \"demo@class.com")
+    public void iProvideCurrentEmailDemoClassCom() {
+        WebElement currentEmail = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[name='current_email']")));
+        currentEmail.clear();
+        currentEmail.sendKeys("demo@class.com");
+    }
+
+    @And("I provide current password \"te$t$tudent")
+    public void iProvideCurrentPasswordTe$t$tudent() {
+        WebElement currentPassword = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='password']")));
+        currentPassword.clear();
+        currentPassword.sendKeys("te$t$tudent");
+    }
+    }

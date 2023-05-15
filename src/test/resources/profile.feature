@@ -6,8 +6,8 @@ Feature: Profile Feature
     And I submit button
     Then I am logged in
     And I click avatar icon
-    And I provide current email
-    And I provide current password
+    And I provide current email "demo@class.com
+    And I provide current password "te$t$tudent
     And I change profile name
     And I click save button
     Then I changed profile name
