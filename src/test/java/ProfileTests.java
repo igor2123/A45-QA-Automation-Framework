@@ -89,7 +89,7 @@ public class ProfileTests {
 
     @And("I provide current password \"te$t$tudent")
     public void iProvideCurrentPasswordTe$t$tudent() {
-        WebElement currentPassword = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#inputProfileNewPassword")));
+        WebElement currentPassword = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#inputProfileCurrentPassword")));
         currentPassword.clear();
         currentPassword.sendKeys("te$t$tudent");
     }
@@ -116,7 +116,7 @@ public class ProfileTests {
 
     @Then("I changed profile name")
     public void iChangedProfileName() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("inputProfileName")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".toast-success")));
         WebElement actualProfileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a.view-profile>span")));
         String actualName = actualProfileName.getText();
         Assert.assertEquals(actualName, newProfileName);
