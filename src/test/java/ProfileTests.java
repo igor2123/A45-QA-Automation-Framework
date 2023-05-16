@@ -23,6 +23,7 @@ public class ProfileTests {
 
     private WebDriver driver;
     private WebDriverWait wait;
+    private String newProfileName = "Insert Profile Name";
 
     @Before
     @Given("I open browser")
@@ -34,6 +35,7 @@ public class ProfileTests {
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
 
     }
 
@@ -103,7 +105,7 @@ public class ProfileTests {
     public void iChangeProfileName() {
         WebElement profileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#inputProfileName")));
         profileName.clear();
-        profileName.sendKeys(generateRandomName());
+        profileName.sendKeys("DDD");
     }
 
     @And("I click save button")
@@ -114,17 +116,20 @@ public class ProfileTests {
 
     @Then("I changed profile name")
     public void iChangedProfileName() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("inputProfileName")));
         WebElement actualProfileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a.view-profile>span")));
-        Assert.assertEquals(actualProfileName.getText(), generateRandomName());
+        String actualName = actualProfileName.getText();
+        Assert.assertEquals(actualName, newProfileName);
     }
-    private static String generateRandomName() {
-        return UUID.randomUUID().toString().replace("-", "");
+ // private static String generateRandomName() {
+ //       return UUID.randomUUID().toString().replace("-", "");
+  }
 
 
 
-    }
+ //   }
 
 
-}
+
 
 
