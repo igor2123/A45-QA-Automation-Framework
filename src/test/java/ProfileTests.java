@@ -13,7 +13,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.Test;
+
 
 import java.time.Duration;
 import java.util.UUID;
@@ -78,6 +78,20 @@ public class ProfileTests {
 
     }
 
+    @And("I provide current email \"demo@class.com")
+    public void iProvideCurrentEmailDemoClassCom() {
+        WebElement currentEmail = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#inputProfileEmail")));
+        currentEmail.clear();
+        currentEmail.sendKeys("demo@class.com");
+    }
+
+    @And("I provide current password \"te$t$tudent")
+    public void iProvideCurrentPasswordTe$t$tudent() {
+        WebElement currentPassword = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#inputProfileNewPassword")));
+        currentPassword.clear();
+        currentPassword.sendKeys("te$t$tudent");
+    }
+
     @And("I click avatar icon")
     public void iClickAvatarIcon() {
         WebElement avatarIcon = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("img.avatar")));
@@ -85,14 +99,9 @@ public class ProfileTests {
     }
 
 
-
-    public static String generateRandomName() {
-        return UUID.randomUUID().toString().replace("-", "");
-    }
-
     @And("I change profile name")
     public void iChangeProfileName() {
-        WebElement profileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[name='name']")));
+        WebElement profileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#inputProfileName")));
         profileName.clear();
         profileName.sendKeys(generateRandomName());
     }
@@ -106,21 +115,16 @@ public class ProfileTests {
     @Then("I changed profile name")
     public void iChangedProfileName() {
         WebElement actualProfileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a.view-profile>span")));
-
-        Assert.assertEquals(actualProfileName.getText(), "randomName");
+        Assert.assertEquals(actualProfileName.getText(), generateRandomName());
     }
+    private static String generateRandomName() {
+        return UUID.randomUUID().toString().replace("-", "");
 
-    @And("I provide current email \"demo@class.com")
-    public void iProvideCurrentEmailDemoClassCom() {
-        WebElement currentEmail = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[name='current_email']")));
-        currentEmail.clear();
-        currentEmail.sendKeys("demo@class.com");
+
+
     }
 
-    @And("I provide current password \"te$t$tudent")
-    public void iProvideCurrentPasswordTe$t$tudent() {
-        WebElement currentPassword = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='password']")));
-        currentPassword.clear();
-        currentPassword.sendKeys("te$t$tudent");
-    }
-    }
+
+}
+
+

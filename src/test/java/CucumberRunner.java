@@ -6,7 +6,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
-        features = {"src/test/resources/features/Login.feature"},publish = true)
+        features = {"src/test/resources/features/profile.feature"},publish = true)
 
 
 
