@@ -105,7 +105,7 @@ public class ProfileTests {
     public void iChangeProfileName() {
         WebElement profileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#inputProfileName")));
         profileName.clear();
-        profileName.sendKeys("DDD");
+        profileName.sendKeys("Insert Profile Name");
     }
 
     @And("I click save button")
@@ -116,7 +116,7 @@ public class ProfileTests {
 
     @Then("I changed profile name")
     public void iChangedProfileName() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".toast-success")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.success.show")));
         WebElement actualProfileName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("a.view-profile>span")));
         String actualName = actualProfileName.getText();
         Assert.assertEquals(actualName, newProfileName);
