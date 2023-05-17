@@ -12,7 +12,7 @@ public class LoginTests extends BaseTest {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.provideEmail(username);
         loginPage.providePassword(password);
-        loginPage.clickSubmit();
+        loginPage.clickSubmitBtn();
 
         Assert.assertEquals(getDriver().getCurrentUrl(), url); // https://bbb.testpro.io/
     }
@@ -22,7 +22,7 @@ public class LoginTests extends BaseTest {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.provideEmail("demo@class.com");
         loginPage.providePassword("te$t$tudent");
-        loginPage.clickSubmit();
+        loginPage.clickSubmitBtn();
         isAvatarDisplayed();
     }
 
@@ -31,7 +31,7 @@ public class LoginTests extends BaseTest {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.provideEmail("demo@class.com");
         loginPage.providePassword("");
-        loginPage.clickSubmit();
+        loginPage.clickSubmitBtn();
 
         Assert.assertEquals(getDriver().getCurrentUrl(), url); //https://bbb.testpro.io/
     }
@@ -50,7 +50,7 @@ public class LoginTests extends BaseTest {
 
         loginPage.provideEmail("demo@class.com");
         loginPage.providePassword("te$t$tudent");
-        loginPage.clickSubmit();
+        loginPage.clickSubmitBtn();
 
         Assert.assertTrue(homePage.getUserAvatar().isDisplayed());
 
