@@ -2,21 +2,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="TestNG" parallel="methods" thread-count="2">
-
-    <test name="Example Test">
+    <test name="Example Test" preserve-order="false">
         <parameter name="BaseURL" value="https://bbb.testpro.io/"/>
+        <parameter name="browser" value="chrome"/>
         <classes>
-<!--            <class name="RandomTests">-->
-<!--                <methods>-->
-<!--                    <include name="actionMethods" />-->
-<!--                </methods>-->
-<!--            </class>-->
-                        <class name="CucumberRunner">
-                            <methods>
-  <!--                              <include name="loginValidEmailPasswordTest" />-->
-   <!--                             <include name="loginValidEmailEmptyPasswordTest" />-->
-                            </methods>
-                        </class>
+            <class name="CucumberRunner"/>
         </classes>
     </test>
 </suite>
