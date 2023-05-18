@@ -31,11 +31,14 @@ public class PlaylistTest extends BaseTest {
         clickSubmit();
         homePage.openPlaylist();
         homePage.deletePlaylist();
-        WebElement deletedplaylistmsg = getDeletedPlaylistmsg();
-        Assert.assertTrue(deletedplaylistmsg.isDisplayed());
+        homePage.getDeletedPlaylistMsg();
+        WebElement deletedPlaylistMsg = null;
+        Assert.assertTrue(deletedPlaylistMsg.isDisplayed());
 
 
     }
+
+
 
 }
 

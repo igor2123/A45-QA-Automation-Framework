@@ -37,17 +37,23 @@ public class HomePage extends BasePage {
         return playlistElement.isDisplayed();
 
     }
-    public void openPlaylist()  {
+
+    public void openPlaylist() {
         WebElement emptyPlaylist = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".playlist:nth-child(3)")));
         emptyPlaylist.click();
 
     }
-    public void deletePlaylist()  {
+
+    public void deletePlaylist() {
         WebElement deletePlaylistButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".btn-delete-playlist")));
         deletePlaylistButton.click();
 
     }
 
+    public WebElement getDeletedPlaylistMsg() {
+        By deletedPlaylistMsg = By.cssSelector(".deleted-playlist-message");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(deletedPlaylistMsg));
+        return driver.findElement(deletedPlaylistMsg);
+
+    }
 }
-
-
