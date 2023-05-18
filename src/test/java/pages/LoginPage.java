@@ -48,5 +48,8 @@ public class LoginPage extends BasePage {
         logOutLocator.click();
         return this;
     }
+    public void login(){
+
+    }
 }
 
