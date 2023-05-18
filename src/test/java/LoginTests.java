@@ -1,110 +1,70 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import java.time.Duration;
+import pages.HomePage;
+import pages.LoginPage;
 
 public class LoginTests extends BaseTest {
 
     @Test
-    public void loginInvalidEmailValidPasswordTest() {
-        // Pre-condition
-        //      Added ChromeOptions argument below to fix websocket error
-        //ChromeOptions options = new ChromeOptions();
-       // options.addArguments("--remote-allow-origins=*");
+    public static void loginEmptyEmailPasswordTest() {
+        LoginPage loginPage = new LoginPage(getDriver());
 
-       // WebDriver driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        loginPage.provideEmail("")
+                .providePassword("te$t$tudent")
+                .clickSubmitBtn();
 
-        String url = "https://bbb.testpro.io/";
-        driver.get(url);
-
-        // Steps
-        WebElement emailField = driver.findElement(By.cssSelector("input[type='email']"));
-        emailField.click();//not needed
-        emailField.clear();
-        emailField.sendKeys("invalid@class.com");
-
-        WebElement passwordField = driver.findElement(By.cssSelector("input[type='password']"));
-        passwordField.click();//not needed
-        passwordField.clear();
-        passwordField.sendKeys("te$t$tudent");
-
-        WebElement submit = driver.findElement(By.cssSelector("button[type='submit']"));
-        submit.click();
-
-        // Expected Result
-        Assert.assertEquals(driver.getCurrentUrl(), url); //https://bbb.testpro.io/
-
-        // Post-condition
-        driver.quit();
-    }
-
-
-    @Test
-    public void loginValidEmailPasswordTest() {
-        //      Added ChromeOptions argument below to fix websocket error
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-
-        WebDriver driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
-        String url = "https://bbb.testpro.io/";
-        driver.get(url);
-
-        WebElement emailField = driver.findElement(By.cssSelector("input[type='email']"));
-        emailField.click();
-        emailField.clear();
-        emailField.sendKeys("demo@class.com");
-
-        WebElement passwordField = driver.findElement(By.cssSelector("input[type='password']"));
-        passwordField.click();
-        passwordField.clear();
-        passwordField.sendKeys("te$t$tudent");
-
-        WebElement submit = driver.findElement(By.cssSelector("button[type='submit']"));
-        submit.click();
-
-        WebElement avatarIcon = driver.findElement(By.cssSelector("img[class='avatar']"));
-        Assert.assertTrue(avatarIcon.isDisplayed());
-        Assert.assertEquals(avatarIcon.isDisplayed(), true);
-
-        driver.quit();
+        Assert.assertTrue(loginPage.getRegistrationLink().isDisplayed());
     }
 
     @Test
-    public static void loginValidEmailEmptyPasswordTest() {
+    public static void loginWrongPasswordTest() {
+        LoginPage loginPage = new LoginPage(getDriver());
 
-//      Added ChromeOptions argument below to fix websocket error
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
+        loginPage.provideEmail("demo@class.com")
+                .providePassword("te$t123")
+                .clickSubmitBtn();
 
-        WebDriver driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        Assert.assertTrue(loginPage.getRegistrationLink().isDisplayed());
+    }
 
-        String url = "https://bbb.testpro.io/";
-        driver.get(url);
+    @Test
+    public static void loginEmptyPasswordTest() {
+        LoginPage loginPage = new LoginPage(getDriver());
 
-        WebElement emailField = driver.findElement(By.cssSelector("input[type='email']"));
-        emailField.click();//not needed
-        emailField.clear();
-        emailField.sendKeys("demo@class.com");
+        loginPage.provideEmail("demo@class.com")
+                .providePassword("")
+                .clickSubmitBtn();
 
-        WebElement passwordField = driver.findElement(By.cssSelector("input[type='password']"));
-        passwordField.click();//not needed
-        passwordField.clear();
-        passwordField.sendKeys("");
+        Assert.assertTrue(loginPage.getRegistrationLink().isDisplayed());
+    }
 
-        WebElement submit = driver.findElement(By.cssSelector("button[type='submit']"));
-        submit.click();
+    @Test
+    public static void loginWrongEmailTest() {
+        LoginPage loginPage = new LoginPage(getDriver());
 
-        Assert.assertEquals(driver.getCurrentUrl(), url); //https://bbb.testpro.io/
+        loginPage.provideEmail("demo@class.com")
+                .providePassword("te$t$tudent")
+                .clickSubmitBtn();
 
-        driver.quit();
+        Assert.assertTrue(loginPage.getRegistrationLink().isDisplayed());
+    }
+
+    @Test
+    public static void logOut() {
+        LoginPage loginPage = new LoginPage(getDriver());
+
+        loginPage.provideLoginSucceed();
+        loginPage.clicklogOut();
+        Assert.assertTrue(loginPage.getRegistrationLink().isDisplayed());
+    }
+
+    @Test
+    public void loginSucceedTest() {
+        LoginPage loginPage = new LoginPage(getDriver());
+        HomePage homePage = new HomePage(getDriver());
+
+        loginPage.provideLoginSucceed();
+
+        Assert.assertTrue(homePage.getUserAvatar().isDisplayed());
     }
 }

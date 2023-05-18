@@ -5,44 +5,43 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.*;
-
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
+import java.time.Duration;
+import java.util.HashMap;
 
 public class BaseTest {
-    String playlistName = "TestPro Playlist";
 
+    private static final ThreadLocal<WebDriver> THREAD_LOCAL = new ThreadLocal<>();
 
-    protected WebDriver driver = null;
-
-    @BeforeSuite
-    static void setupClass() {
-        WebDriverManager.chromedriver().setup();
-    }
-
-    @DataProvider(name = "IncorrectLoginData")
-    public static Object[][] getDataFromDataProviders() {
-
-        return new Object[][]{
-                {"invalid@mail.com", "invalidPass"},
-                {"demo@class.com", ""},
-                {"", ""}
-        };
+    public static WebDriver getDriver() {
+        return THREAD_LOCAL.get();
     }
 
     @BeforeMethod
     @Parameters({"BaseURL", "browser"})
-    public void launchBrowser(@Optional String BaseURL, @Optional String browser) throws MalformedURLException {
-        driver = pickBrowser(browser);
-        driver.get(BaseURL);
+    public void launchBrowser(@Optional String baseURL, @Optional String browser) throws MalformedURLException {
+        THREAD_LOCAL.set(pickBrowser(browser));
+        THREAD_LOCAL.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        THREAD_LOCAL.get().manage().window().maximize();
+        THREAD_LOCAL.get().manage().deleteAllCookies();
+        getDriver().get(baseURL);
+        System.out.println(
+                "Browser setup by Thread " + Thread.currentThread().getId() + " and Driver reference is : " + getDriver());
+
+
     }
 
-    public WebDriver pickBrowser(String browser) throws MalformedURLException {
+
+
+    private WebDriver pickBrowser(String browser) throws MalformedURLException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         String gridURL = "http://192.168.12.105:4444";
 
@@ -51,30 +50,32 @@ public class BaseTest {
                 WebDriverManager.firefoxdriver().setup();
                 FirefoxOptions optionsFirefox = new FirefoxOptions();
                 optionsFirefox.addArguments("-private");
-                return driver = new FirefoxDriver(optionsFirefox);
+                return new FirefoxDriver();
             case "edge":
                 WebDriverManager.edgedriver().setup();
-                return driver = new EdgeDriver();
+                return new EdgeDriver();
             case "grid-firefox":
                 capabilities.setCapability("browserName", "firefox");
-                return driver = new RemoteWebDriver(URI.create(gridURL).toURL(), capabilities);
+                return new RemoteWebDriver(URI.create(gridURL).toURL(), capabilities);
             case "grid-edge":
                 capabilities.setCapability("browserName", "edge");
-                return driver = new RemoteWebDriver(URI.create(gridURL).toURL(), capabilities);
+                return new RemoteWebDriver(URI.create(gridURL).toURL(), capabilities);
             case "grid-chrome":
                 capabilities.setCapability("browserName", "chrome");
-                return driver = new RemoteWebDriver(URI.create(gridURL).toURL(), capabilities);
+                return new RemoteWebDriver(URI.create(gridURL).toURL(), capabilities);
+
             default:
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions options = new ChromeOptions();
-                options.addArguments("--disable-notifications","--remote-allow-origins=*", "--incognito","--start-maximized");
-                return driver = new ChromeDriver(options);
+                options.addArguments("--disable-notifications", "--remote-allow-origins=*", "--incognito", "--start-maximized");
+                return new ChromeDriver(options);
         }
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
-        driver.quit();
+        THREAD_LOCAL.get().close();
+        THREAD_LOCAL.remove();
+
     }
 }
-

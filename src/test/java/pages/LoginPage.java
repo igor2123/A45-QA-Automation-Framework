@@ -2,21 +2,26 @@ package pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import pages.BasePage;
 
 public class LoginPage extends BasePage {
-
+    @FindBy(css = "button[type='submit']")
+    private WebElement submitButtonLocator;
     @FindBy(css = "[type='email']")
     private WebElement emailField;
-
     @FindBy(css = "[type='password']")
     private WebElement passwordField;
+    @FindBy(css = "a#hel")
+    private WebElement registrationLink;
+    @FindBy(css = ".fa-sign-out")
+    private WebElement logOutLocator;
 
-    @FindBy(css = "[type='submit']")
-    private WebElement submitBtn;
+    public LoginPage(WebDriver givenDriver) {
+        super(givenDriver);
+    }
 
-    public LoginPage(WebDriver driver) {
-        super(driver);
+    public LoginPage clickSubmitBtn() {
+        submitButtonLocator.click();
+        return this;
     }
 
     public LoginPage provideEmail(String email) {
@@ -29,15 +34,19 @@ public class LoginPage extends BasePage {
         return this;
     }
 
-    public LoginPage clickSubmitBtn() {
-        submitBtn.click();
-        return this;
+    public void provideLoginSucceed() {
+        provideEmail("demo@class.com");
+        providePassword("te$t$tudent");
+        clickSubmitBtn();
     }
 
-    public void login() {
-        provideEmail("demo@class.com")
-                .providePassword("te$t$tudent")
-                .clickSubmitBtn();
+    public WebElement getRegistrationLink() {
+        return registrationLink;
+    }
+
+    public LoginPage clicklogOut() {
+        logOutLocator.click();
+        return this;
     }
 }
 
