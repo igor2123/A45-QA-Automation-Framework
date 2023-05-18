@@ -6,10 +6,10 @@ import pages.LoginPage;
 public class LoginTests extends BaseTest {
 
     @Test
-    public static void loginEmptyEmailPasswordTest() {
+    public static void loginValidEmailPasswordTest() {
         LoginPage loginPage = new LoginPage(getDriver());
 
-        loginPage.provideEmail("")
+        loginPage.provideEmail("demo@class.com")
                 .providePassword("te$t$tudent")
                 .clickSubmitBtn();
 

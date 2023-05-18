@@ -29,7 +29,7 @@ public class BaseTest {
     @Parameters({"BaseURL", "browser"})
     public void launchBrowser(@Optional String baseURL, @Optional String browser) throws MalformedURLException {
         THREAD_LOCAL.set(pickBrowser(browser));
-        THREAD_LOCAL.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        THREAD_LOCAL.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         THREAD_LOCAL.get().manage().window().maximize();
         THREAD_LOCAL.get().manage().deleteAllCookies();
         getDriver().get(baseURL);
@@ -39,17 +39,31 @@ public class BaseTest {
 
     }
 
-
+  //  private WebDriver newLambdaTest() throws MalformedURLException {
+    //    String hubURL = "https://hub.lambdatest.com/wd/hub";
+      //  ChromeOptions browserOptions = new ChromeOptions();
+     //   browserOptions.setPlatformName("Windows 10");
+       // browserOptions.setBrowserVersion("113.0");
+      //  HashMap<String, Object> ltOptions = new HashMap<>();
+      //  ltOptions.put("username", "igor.smirnov");
+       // ltOptions.put("accessKey", "kMwcMPmvrxyWEdOZXjWp5lVQMGrSs3tIESg45t2z21o8Rnkgc0");
+      //  ltOptions.put("project", "Untitled");
+      //  ltOptions.put("name", "Test1");
+      //  ltOptions.put("w3c", true);
+       // ltOptions.put("plugin", "java-testNG");
+       // browserOptions.setCapability("LT:Options", ltOptions);
+      //  return new RemoteWebDriver(new URL(hubURL), browserOptions);
+   // }
 
     private WebDriver pickBrowser(String browser) throws MalformedURLException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         String gridURL = "http://192.168.12.105:4444";
 
         switch (browser) {
-            case "firefox":
-                WebDriverManager.firefoxdriver().setup();
-                FirefoxOptions optionsFirefox = new FirefoxOptions();
-                optionsFirefox.addArguments("-private");
+              case "firefox":
+              WebDriverManager.firefoxdriver().setup();
+            FirefoxOptions optionsFirefox = new FirefoxOptions();
+           optionsFirefox.addArguments("-private");
                 return new FirefoxDriver();
             case "edge":
                 WebDriverManager.edgedriver().setup();
@@ -63,19 +77,22 @@ public class BaseTest {
             case "grid-chrome":
                 capabilities.setCapability("browserName", "chrome");
                 return new RemoteWebDriver(URI.create(gridURL).toURL(), capabilities);
-
+      //      case "cloud":
+       //         return newLambdaTest();
             default:
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions options = new ChromeOptions();
-                options.addArguments("--disable-notifications", "--remote-allow-origins=*", "--incognito", "--start-maximized");
+                options.addArguments("--disable-notifications");
+                options.addArguments("--remote-allow-origins=*");
+
                 return new ChromeDriver(options);
         }
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
-        THREAD_LOCAL.get().close();
-        THREAD_LOCAL.remove();
+       THREAD_LOCAL.get().close();
+       THREAD_LOCAL.remove();
 
     }
 }

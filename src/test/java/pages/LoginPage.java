@@ -5,15 +5,15 @@ import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends BasePage {
     @FindBy(css = "button[type='submit']")
-    private WebElement submitButtonLocator;
+    protected WebElement submitButtonLocator;
     @FindBy(css = "[type='email']")
-    private WebElement emailField;
+    protected WebElement emailField;
     @FindBy(css = "[type='password']")
-    private WebElement passwordField;
+    protected WebElement passwordField;
     @FindBy(css = "a#hel")
-    private WebElement registrationLink;
+    protected WebElement registrationLink;
     @FindBy(css = ".fa-sign-out")
-    private WebElement logOutLocator;
+    protected WebElement logOutLocator;
 
     public LoginPage(WebDriver givenDriver) {
         super(givenDriver);
@@ -25,7 +25,7 @@ public class LoginPage extends BasePage {
     }
 
     public LoginPage provideEmail(String email) {
-        emailField.sendKeys(email);
+         emailField.sendKeys(email);
         return this;
     }
 
