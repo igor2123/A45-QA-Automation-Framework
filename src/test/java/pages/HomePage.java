@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class HomePage extends BasePage {
@@ -14,16 +15,22 @@ public class HomePage extends BasePage {
     }
 
     By userAvatarIcon = By.cssSelector("img.avatar");
+    @FindBy(css = ".playlist:nth-child(3)")
+    protected WebElement doubleClickPlaylist;
+    public WebElement doubleClickPlaylist() {
+        return doubleClickPlaylist;
+    }
+
 
     public WebElement getUserAvatar() {
         return findElement(userAvatarIcon);
     }
 
-    public void doubleClickPlaylist() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".playlist:nth-child(3)")));
-        WebElement playlistElement = driver.findElement(By.cssSelector(".playlist:nth-child(3)"));
-        actions.doubleClick(playlistElement).perform();
-    }
+  //  public void doubleClickPlaylist() {
+    //    wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".playlist:nth-child(3)")));
+    //    WebElement playlistElement = driver.findElement(By.cssSelector(".playlist:nth-child(3)"));
+    //    actions.doubleClick(playlistElement).perform();
+   // }
 
     public void enterNewPlaylistName() {
         WebElement playlistInputField = driver.findElement(By.cssSelector("input[name='name']"));
@@ -49,11 +56,11 @@ public class HomePage extends BasePage {
         deletePlaylistButton.click();
 
     }
-
-    public WebElement getDeletedPlaylistMsg() {
-        By deletedPlaylistMsg = By.cssSelector(".deleted-playlist-message");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(deletedPlaylistMsg));
-        return driver.findElement(deletedPlaylistMsg);
-
-    }
 }
+  //public WebElement getDeletedPlaylistMsg() {
+ //       By deletedPlaylistMsg = By.cssSelector(".deleted-playlist-message");
+  //      wait.until(ExpectedConditions.visibilityOfElementLocated(deletedPlaylistMsg));
+ //       return driver.findElement(deletedPlaylistMsg);
+
+  //  }
+//}
